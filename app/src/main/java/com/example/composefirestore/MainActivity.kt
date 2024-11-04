@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.text.input.KeyboardType
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 
 class MainActivity : ComponentActivity() {
@@ -111,7 +112,9 @@ fun Birth(m: Modifier){
                 Text("新增/修改資料")
             }
             Button(onClick = { db.collection("users")
-                .whereEqualTo("userName", userName)
+                //.whereEqualTo("userName", userName)
+                .whereLessThan("userWeight", userWeight)
+
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -126,10 +129,15 @@ fun Birth(m: Modifier){
                     }
                 }
 
+
             }) {
                 Text("查詢資料")
             }
-            Button(onClick = {  }) {
+            Button(onClick = { db.collection("users")
+                .document(userName)
+                .delete()
+                msg = "刪除資料"
+            }) {
                 Text("刪除資料")
             }
         }
